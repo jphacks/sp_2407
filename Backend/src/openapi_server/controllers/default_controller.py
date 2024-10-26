@@ -60,6 +60,7 @@ def get_teams_info():  # noqa: E501
 
 
 def post_station_photo(station_id, photo=None):  # noqa: E501
+  
     """ステーションの写真をアップロード
 
     指定されたステーションに対して写真をアップロードします。 # noqa: E501
