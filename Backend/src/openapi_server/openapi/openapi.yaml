@@ -18,7 +18,7 @@ tags:
   name: admin
 paths:
   /database/reset:
-    post:
+    get:
       description: 開発環境でデータベースをリセットします。すべてのデータが削除されます。
       operationId: reset_database
       responses:

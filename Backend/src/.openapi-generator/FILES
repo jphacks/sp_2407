@@ -6,8 +6,6 @@ README.md
 git_push.sh
 openapi_server/__init__.py
 openapi_server/controllers/__init__.py
-openapi_server/controllers/admin_controller.py
-openapi_server/controllers/default_controller.py
 openapi_server/controllers/security_controller.py
 openapi_server/encoder.py
 openapi_server/models/__init__.py

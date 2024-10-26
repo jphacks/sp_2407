@@ -11,7 +11,7 @@ from openapi_server.models.team_properties import TeamProperties
 from openapi_server.models.teams_response import TeamsResponse  # noqa: E501
 from openapi_server.models.vote_response import VoteResponse  # noqa: E501
 from openapi_server import util
-from flask import current_app
+from flask import current_app, jsonify
 
 def get_nearby_stations(latitude, longitude, radius=None):  # noqa: E501
     """周辺のステーションの座標を取得
@@ -28,10 +28,9 @@ def get_nearby_stations(latitude, longitude, radius=None):  # noqa: E501
     :rtype: Union[List[NearbyStationsResponseInner], Tuple[List[NearbyStationsResponseInner], int], Tuple[List[NearbyStationsResponseInner], int, Dict[str, str]]
     """
     mongo = current_app.mongo
-    stations = mongo.db.stations.find({}, {"uuid": 1})  
-    uuid_list = [station['uuid'] for station in stations if 'uuid' in station]
-    
-    return uuid_list
+    stations = mongo.db.stations.find() 
+    station_list = [station for station in stations]
+    return jsonify(station_list)
 
 def get_station_photos_url(station_id):  # noqa: E501
     """ステーションの写真URLを取得

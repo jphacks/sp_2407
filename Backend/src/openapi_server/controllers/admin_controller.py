@@ -15,7 +15,7 @@ def reset_database():  # noqa: E501
 
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
-    station_collection = current_app.mongo.stations
+    station_collection = current_app.mongo.db.stations
     station_collection.delete_many({})
     station_data = {
         "stationId": "123e4567-e89b-12d3-a456-426614174000",
@@ -34,6 +34,6 @@ def reset_database():  # noqa: E501
         }
     }
 
-    # MongoDB에 데이터 삽입
-    current_app.mongo.stations.insert_one(station_data)
+
+    current_app.mongo.db.stations.insert_one(station_data)
     return 'do some magic!'

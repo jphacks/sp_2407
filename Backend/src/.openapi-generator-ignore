@@ -24,4 +24,5 @@
 
 */__main__.py
 requirements.txt
-default_controller.py
+**/default_controller.py
+**/admin_controller.py
