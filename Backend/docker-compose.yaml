@@ -1,0 +1,38 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:latest
+    container_name: sp2407_mongo_db
+    networks:
+      - shared_network
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    build:
+      context: ./src
+    container_name: sp2407_app
+    networks:
+      - shared_network
+    entrypoint: ["python3", "-m", "openapi_server"]
+  nginx:
+    container_name: sp2407_nginx
+    restart: always
+    depends_on:
+      - app
+    build:
+      context: ./nginx
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/html:/etc/nginx/html
+    ports:
+      - "80:80"
+    networks:
+      - shared_network
+      
+networks:
+  shared_network:
+    driver: bridge
+
+volumes:
+  mongo_data:

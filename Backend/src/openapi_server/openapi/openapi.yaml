@@ -1,0 +1,352 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: support@sp2407.com
+    name: SP2407 Team
+  description: 周辺のステーションの座標を取得し、各ステーションに対してRed/Greenチームに投票し、写真をアップロードするためのAPIです。
+  title: SP2407 Nearby Stations API
+  version: 1.5.0
+servers:
+- description: ローカル開発サーバー
+  url: http://localhost:8080/api
+- description: 本番サーバー
+  url: https://api.sp2407.com
+paths:
+  /stations/nearby:
+    get:
+      description: 指定された場所の周辺にあるステーションの座標を返します。
+      operationId: get_nearby_stations
+      parameters:
+      - description: 現在の場所の緯度。
+        explode: true
+        in: query
+        name: latitude
+        required: true
+        schema:
+          format: float
+          type: number
+        style: form
+      - description: 現在の場所の経度。
+        explode: true
+        in: query
+        name: longitude
+        required: true
+        schema:
+          format: float
+          type: number
+        style: form
+      - description: ステーションを検索する半径（メートル単位）。デフォルトは1000メートルです。
+        explode: true
+        in: query
+        name: radius
+        required: false
+        schema:
+          default: 1000
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearbyStationsResponse'
+          description: 周辺のステーションとその座標のリスト。
+        "400":
+          description: リクエストパラメーターが無効です。
+        "500":
+          description: サーバー内部エラー。
+      summary: 周辺のステーションの座標を取得
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /stations/{stationId}/photo:
+    post:
+      description: 指定されたステーションに対して写真をアップロードします。
+      operationId: post_station_photo
+      parameters:
+      - description: 写真をアップロードするステーションのID。
+        explode: false
+        in: path
+        name: stationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/postStationPhoto_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoUploadResponse'
+          description: 写真が正常にアップロードされました。
+        "400":
+          description: リクエストパラメーターが無効です。
+        "404":
+          description: 指定されたステーションが見つかりません。
+        "500":
+          description: サーバー内部エラー。
+      summary: ステーションの写真をアップロード
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /stations/{stationId}/photosURL:
+    get:
+      description: 指定されたステーションにアップロードされた写真のURLリストを取得します。
+      operationId: get_station_photos_url
+      parameters:
+      - description: 写真URLを取得するステーションのID。
+        explode: false
+        in: path
+        name: stationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotosURLResponse'
+          description: ステーションにアップロードされた写真のURLリスト。
+        "400":
+          description: リクエストパラメーターが無効です。
+        "404":
+          description: 指定されたステーションが見つかりません。
+        "500":
+          description: サーバー内部エラー。
+      summary: ステーションの写真URLを取得
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /stations/{stationId}/vote:
+    post:
+      description: 指定されたステーションに対してRedチームまたはGreenチームに投票します。
+      operationId: post_station_vote
+      parameters:
+      - description: 投票するステーションのID。
+        explode: false
+        in: path
+        name: stationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/postStationVote_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteResponse'
+          description: 投票が成功しました。
+        "400":
+          description: リクエストパラメーターが無効です。
+        "404":
+          description: 指定されたステーションが見つかりません。
+        "500":
+          description: サーバー内部エラー。
+      summary: ステーションに対するチーム投票
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /teams:
+    get:
+      description: RedチームとGreenチームのemojiとお題を取得します。
+      operationId: get_teams_info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsResponse'
+          description: チームの情報のリスト。
+        "500":
+          description: サーバー内部エラー。
+      summary: 利用可能なチームの情報を取得
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+components:
+  schemas:
+    NearbyStationsResponse:
+      items:
+        $ref: '#/components/schemas/NearbyStationsResponse_inner'
+      type: array
+    VoteResponse:
+      example:
+        totalVotes:
+          Red: 1
+          Green: 5
+        team: Red
+        stationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        stationId:
+          description: 投票したステーションのID。
+          format: uuid
+          title: stationId
+          type: string
+        team:
+          description: 投票されたチームの名前。
+          enum:
+          - Red
+          - Green
+          title: team
+          type: string
+        totalVotes:
+          $ref: '#/components/schemas/NearbyStationsResponse_inner_totalVotes'
+      title: VoteResponse
+      type: object
+    TeamsResponse:
+      example:
+        Red:
+          emoji: emoji
+          theme: theme
+        Green:
+          emoji: emoji
+          theme: theme
+      properties:
+        Red:
+          $ref: '#/components/schemas/TeamsResponse_Red'
+        Green:
+          $ref: '#/components/schemas/TeamsResponse_Green'
+      title: TeamsResponse
+      type: object
+    PhotoUploadResponse:
+      example:
+        photoUrls:
+        - https://openapi-generator.tech
+        - https://openapi-generator.tech
+      properties:
+        photoUrls:
+          description: アップロードされた写真のURLリスト。
+          items:
+            format: uri
+            type: string
+          title: photoUrls
+          type: array
+      title: PhotoUploadResponse
+      type: object
+    PhotosURLResponse:
+      example:
+        photoUrls:
+        - https://openapi-generator.tech
+        - https://openapi-generator.tech
+      properties:
+        photoUrls:
+          description: ステーションにアップロードされた写真のURLリスト。
+          items:
+            format: uri
+            type: string
+          title: photoUrls
+          type: array
+      title: PhotosURLResponse
+      type: object
+    postStationVote_request:
+      properties:
+        team:
+          description: 投票するチームの名前。
+          enum:
+          - Red
+          - Green
+          title: team
+          type: string
+      title: postStationVote_request
+      type: object
+    postStationPhoto_request:
+      properties:
+        photo:
+          description: アップロードする写真ファイル。
+          format: binary
+          type: string
+      type: object
+    NearbyStationsResponse_inner_coordinates:
+      example:
+        latitude: 0.8008282
+        longitude: 6.0274563
+      properties:
+        latitude:
+          format: float
+          title: latitude
+          type: number
+        longitude:
+          format: float
+          title: longitude
+          type: number
+      title: NearbyStationsResponse_inner_coordinates
+      type: object
+    NearbyStationsResponse_inner_totalVotes:
+      example:
+        Red: 1
+        Green: 5
+      properties:
+        Red:
+          description: Redチームの総投票数。
+          title: Red
+          type: integer
+        Green:
+          description: Greenチームの総投票数。
+          title: Green
+          type: integer
+      title: NearbyStationsResponse_inner_totalVotes
+      type: object
+    NearbyStationsResponse_inner:
+      example:
+        totalVotes:
+          Red: 1
+          Green: 5
+        coordinates:
+          latitude: 0.8008282
+          longitude: 6.0274563
+        stationName: stationName
+        stationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        stationId:
+          description: ステーションのID。
+          format: uuid
+          title: stationId
+          type: string
+        stationName:
+          description: ステーションの名前。
+          title: stationName
+          type: string
+        coordinates:
+          $ref: '#/components/schemas/NearbyStationsResponse_inner_coordinates'
+        totalVotes:
+          $ref: '#/components/schemas/NearbyStationsResponse_inner_totalVotes'
+      title: NearbyStationsResponse_inner
+      type: object
+    TeamsResponse_Red:
+      example:
+        emoji: emoji
+        theme: theme
+      properties:
+        emoji:
+          description: Redチームのemoji。
+          title: emoji
+          type: string
+        theme:
+          description: Redチームのお題。
+          title: theme
+          type: string
+      title: TeamsResponse_Red
+      type: object
+    TeamsResponse_Green:
+      example:
+        emoji: emoji
+        theme: theme
+      properties:
+        emoji:
+          description: Greenチームのemoji。
+          title: emoji
+          type: string
+        theme:
+          description: Greenチームのお題。
+          title: theme
+          type: string
+      title: TeamsResponse_Green
+      type: object
