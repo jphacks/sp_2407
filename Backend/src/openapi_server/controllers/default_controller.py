@@ -7,10 +7,11 @@ from openapi_server.models.nearby_stations_response_inner import NearbyStationsR
 from openapi_server.models.photo_upload_response import PhotoUploadResponse  # noqa: E501
 from openapi_server.models.photos_url_response import PhotosURLResponse  # noqa: E501
 from openapi_server.models.post_station_vote_request import PostStationVoteRequest  # noqa: E501
+from openapi_server.models.team_properties import TeamProperties
 from openapi_server.models.teams_response import TeamsResponse  # noqa: E501
 from openapi_server.models.vote_response import VoteResponse  # noqa: E501
 from openapi_server import util
-
+from flask import current_app
 
 def get_nearby_stations(latitude, longitude, radius=None):  # noqa: E501
     """周辺のステーションの座標を取得
@@ -26,8 +27,11 @@ def get_nearby_stations(latitude, longitude, radius=None):  # noqa: E501
 
     :rtype: Union[List[NearbyStationsResponseInner], Tuple[List[NearbyStationsResponseInner], int], Tuple[List[NearbyStationsResponseInner], int, Dict[str, str]]
     """
-    return 'do some magic!'
-
+    mongo = current_app.mongo
+    stations = mongo.db.stations.find({}, {"uuid": 1})  
+    uuid_list = [station['uuid'] for station in stations if 'uuid' in station]
+    
+    return uuid_list
 
 def get_station_photos_url(station_id):  # noqa: E501
     """ステーションの写真URLを取得
@@ -46,12 +50,14 @@ def get_station_photos_url(station_id):  # noqa: E501
 def get_teams_info():  # noqa: E501
     """利用可能なチームの情報を取得
 
-    RedチームとGreenチームのemojiとお題を取得します。 # noqa: E501
+    RedチームとGreenチームのemojiとお題、そして全体のお知らせを取得します。 # noqa: E501
 
 
     :rtype: Union[TeamsResponse, Tuple[TeamsResponse, int], Tuple[TeamsResponse, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    return TeamsResponse(red=TeamProperties(emoji='🍈', theme='メロンだろう！'),
+                         green=TeamProperties(emoji='🍉', theme='定番のスイカだ！'),
+                         team_selection_message="夏ならどっちだ？")
 
 
 def post_station_photo(station_id, photo=None):  # noqa: E501
@@ -67,6 +73,7 @@ def post_station_photo(station_id, photo=None):  # noqa: E501
 
     :rtype: Union[PhotoUploadResponse, Tuple[PhotoUploadResponse, int], Tuple[PhotoUploadResponse, int, Dict[str, str]]
     """
+
     return 'do some magic!'
 
 

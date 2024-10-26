@@ -23,3 +23,5 @@
 #!docs/README.md
 
 */__main__.py
+requirements.txt
+default_controller.py

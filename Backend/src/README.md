@@ -21,13 +21,13 @@ python3 -m openapi_server
 and open your browser to here:
 
 ```
-http://localhost:8080/api/ui/
+http://localhost:8080/api/v0/ui/
 ```
 
 Your OpenAPI definition lives here:
 
 ```
-http://localhost:8080/api/openapi.json
+http://localhost:8080/api/v0/openapi.json
 ```
 
 To launch the integration tests, use tox:

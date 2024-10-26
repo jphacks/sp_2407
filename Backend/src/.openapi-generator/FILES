@@ -6,6 +6,7 @@ README.md
 git_push.sh
 openapi_server/__init__.py
 openapi_server/controllers/__init__.py
+openapi_server/controllers/admin_controller.py
 openapi_server/controllers/default_controller.py
 openapi_server/controllers/security_controller.py
 openapi_server/encoder.py
@@ -17,15 +18,13 @@ openapi_server/models/nearby_stations_response_inner_total_votes.py
 openapi_server/models/photo_upload_response.py
 openapi_server/models/photos_url_response.py
 openapi_server/models/post_station_vote_request.py
+openapi_server/models/team_properties.py
 openapi_server/models/teams_response.py
-openapi_server/models/teams_response_green.py
-openapi_server/models/teams_response_red.py
 openapi_server/models/vote_response.py
 openapi_server/openapi/openapi.yaml
 openapi_server/test/__init__.py
 openapi_server/typing_utils.py
 openapi_server/util.py
-requirements.txt
 setup.py
 test-requirements.txt
 tox.ini

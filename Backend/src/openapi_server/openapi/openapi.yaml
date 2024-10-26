@@ -8,10 +8,28 @@ info:
   version: 1.5.0
 servers:
 - description: ローカル開発サーバー
-  url: http://localhost:8080/api
+  url: http://localhost/api/v0
 - description: 本番サーバー
   url: https://api.sp2407.com
+tags:
+- description: default
+  name: default
+- description: don't touch
+  name: admin
 paths:
+  /database/reset:
+    post:
+      description: 開発環境でデータベースをリセットします。すべてのデータが削除されます。
+      operationId: reset_database
+      responses:
+        "200":
+          description: データベースが正常にリセットされました。
+        "500":
+          description: サーバー内部エラー。
+      summary: データベースのリセット
+      tags:
+      - admin
+      x-openapi-router-controller: openapi_server.controllers.admin_controller
   /stations/nearby:
     get:
       description: 指定された場所の周辺にあるステーションの座標を返します。
@@ -53,8 +71,6 @@ paths:
           description: 周辺のステーションとその座標のリスト。
         "400":
           description: リクエストパラメーターが無効です。
-        "500":
-          description: サーバー内部エラー。
       summary: 周辺のステーションの座標を取得
       x-openapi-router-controller: openapi_server.controllers.default_controller
   /stations/{stationId}/photo:
@@ -88,8 +104,6 @@ paths:
           description: リクエストパラメーターが無効です。
         "404":
           description: 指定されたステーションが見つかりません。
-        "500":
-          description: サーバー内部エラー。
       summary: ステーションの写真をアップロード
       x-openapi-router-controller: openapi_server.controllers.default_controller
   /stations/{stationId}/photosURL:
@@ -117,8 +131,6 @@ paths:
           description: リクエストパラメーターが無効です。
         "404":
           description: 指定されたステーションが見つかりません。
-        "500":
-          description: サーバー内部エラー。
       summary: ステーションの写真URLを取得
       x-openapi-router-controller: openapi_server.controllers.default_controller
   /stations/{stationId}/vote:
@@ -152,13 +164,11 @@ paths:
           description: リクエストパラメーターが無効です。
         "404":
           description: 指定されたステーションが見つかりません。
-        "500":
-          description: サーバー内部エラー。
       summary: ステーションに対するチーム投票
       x-openapi-router-controller: openapi_server.controllers.default_controller
   /teams:
     get:
-      description: RedチームとGreenチームのemojiとお題を取得します。
+      description: RedチームとGreenチームのemojiとお題、そして全体のお知らせを取得します。
       operationId: get_teams_info
       responses:
         "200":
@@ -201,19 +211,39 @@ components:
           $ref: '#/components/schemas/NearbyStationsResponse_inner_totalVotes'
       title: VoteResponse
       type: object
+    TeamProperties:
+      example:
+        emoji: emoji
+        theme: theme
+      properties:
+        emoji:
+          description: チームのemoji。
+          title: emoji
+          type: string
+        theme:
+          description: チームのお題。
+          title: theme
+          type: string
+      title: TeamProperties
+      type: object
     TeamsResponse:
       example:
         Red:
           emoji: emoji
           theme: theme
+        teamSelectionMessage: teamSelectionMessage
         Green:
           emoji: emoji
           theme: theme
       properties:
+        teamSelectionMessage:
+          description: チームを選ぶ際に表示される全体へのメッセージ。
+          title: teamSelectionMessage
+          type: string
         Red:
-          $ref: '#/components/schemas/TeamsResponse_Red'
+          $ref: '#/components/schemas/TeamProperties'
         Green:
-          $ref: '#/components/schemas/TeamsResponse_Green'
+          $ref: '#/components/schemas/TeamProperties'
       title: TeamsResponse
       type: object
     PhotoUploadResponse:
@@ -319,34 +349,4 @@ components:
         totalVotes:
           $ref: '#/components/schemas/NearbyStationsResponse_inner_totalVotes'
       title: NearbyStationsResponse_inner
-      type: object
-    TeamsResponse_Red:
-      example:
-        emoji: emoji
-        theme: theme
-      properties:
-        emoji:
-          description: Redチームのemoji。
-          title: emoji
-          type: string
-        theme:
-          description: Redチームのお題。
-          title: theme
-          type: string
-      title: TeamsResponse_Red
-      type: object
-    TeamsResponse_Green:
-      example:
-        emoji: emoji
-        theme: theme
-      properties:
-        emoji:
-          description: Greenチームのemoji。
-          title: emoji
-          type: string
-        theme:
-          description: Greenチームのお題。
-          title: theme
-          type: string
-      title: TeamsResponse_Green
       type: object

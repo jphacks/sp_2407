@@ -1,0 +1,253 @@
+openapi: 3.0.0
+info:
+  title: SP2407 Nearby Stations API
+  version: 1.5.0
+  description: 周辺のステーションの座標を取得し、各ステーションに対してRed/Greenチームに投票し、写真をアップロードするためのAPIです。
+  contact:
+    name: SP2407 Team
+    email: support@sp2407.com
+
+servers:
+  - url: http://localhost/api/v0
+    description: ローカル開発サーバー
+  - url: https://api.sp2407.com
+    description: 本番サーバー
+
+components:
+  schemas:
+    NearbyStationsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          stationId:
+            type: string
+            format: uuid
+            description: ステーションのID。
+          stationName:
+            type: string
+            description: ステーションの名前。
+          coordinates:
+            type: object
+            properties:
+              latitude:
+                type: number
+                format: float
+              longitude:
+                type: number
+                format: float
+          totalVotes:
+            type: object
+            properties:
+              Red:
+                type: integer
+                description: Redチームの総投票数。
+              Green:
+                type: integer
+                description: Greenチームの総投票数。
+    VoteResponse:
+      type: object
+      properties:
+        stationId:
+          type: string
+          format: uuid
+          description: 投票したステーションのID。
+        team:
+          type: string
+          enum: [Red, Green]
+          description: 投票されたチームの名前。
+        totalVotes:
+          type: object
+          properties:
+            Red:
+              type: integer
+              description: Redチームの総投票数。
+            Green:
+              type: integer
+              description: Greenチームの総投票数。
+    TeamProperties:
+      type: object
+      properties:
+        emoji:
+          type: string
+          description: チームのemoji。
+        theme:
+          type: string
+          description: チームのお題。
+    TeamsResponse:
+      type: object
+      properties:
+        teamSelectionMessage:
+          type: string
+          description: チームを選ぶ際に表示される全体へのメッセージ。
+        Red:
+          $ref: '#/components/schemas/TeamProperties'
+        Green:
+          $ref: '#/components/schemas/TeamProperties'
+    PhotoUploadResponse:
+      type: object
+      properties:
+        photoUrls:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: アップロードされた写真のURLリスト。
+    PhotosURLResponse:
+      type: object
+      properties:
+        photoUrls:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: ステーションにアップロードされた写真のURLリスト。
+
+paths:
+  /stations/nearby:
+    get:
+      operationId: getNearbyStations
+      summary: 周辺のステーションの座標を取得
+      description: 指定された場所の周辺にあるステーションの座標を返します。
+      parameters:
+        - name: latitude
+          in: query
+          required: true
+          description: 現在の場所の緯度。
+          schema:
+            type: number
+            format: float
+        - name: longitude
+          in: query
+          required: true
+          description: 現在の場所の経度。
+          schema:
+            type: number
+            format: float
+        - name: radius
+          in: query
+          required: false
+          description: ステーションを検索する半径（メートル単位）。デフォルトは1000メートルです。
+          schema:
+            type: integer
+            default: 1000
+      responses:
+        '200':
+          description: 周辺のステーションとその座標のリスト。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearbyStationsResponse'
+        '400':
+          description: リクエストパラメーターが無効です。
+
+  /stations/{stationId}/vote:
+    post:
+      operationId: postStationVote
+      summary: ステーションに対するチーム投票
+      description: 指定されたステーションに対してRedチームまたはGreenチームに投票します。
+      parameters:
+        - name: stationId
+          in: path
+          required: true
+          description: 投票するステーションのID。
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                team:
+                  type: string
+                  enum: [Red, Green]
+                  description: 投票するチームの名前。
+      responses:
+        '200':
+          description: 投票が成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteResponse'
+        '400':
+          description: リクエストパラメーターが無効です。
+        '404':
+          description: 指定されたステーションが見つかりません。
+
+  /stations/{stationId}/photo:
+    post:
+      operationId: postStationPhoto
+      summary: ステーションの写真をアップロード
+      description: 指定されたステーションに対して写真をアップロードします。
+      parameters:
+        - name: stationId
+          in: path
+          required: true
+          description: 写真をアップロードするステーションのID。
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photo:
+                  type: string
+                  format: binary
+                  description: アップロードする写真ファイル。
+      responses:
+        '200':
+          description: 写真が正常にアップロードされました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoUploadResponse'
+        '400':
+          description: リクエストパラメーターが無効です。
+        '404':
+          description: 指定されたステーションが見つかりません。
+
+  /stations/{stationId}/photosURL:
+    get:
+      operationId: getStationPhotosURL
+      summary: ステーションの写真URLを取得
+      description: 指定されたステーションにアップロードされた写真のURLリストを取得します。
+      parameters:
+        - name: stationId
+          in: path
+          required: true
+          description: 写真URLを取得するステーションのID。
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: ステーションにアップロードされた写真のURLリスト。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotosURLResponse'
+        '400':
+          description: リクエストパラメーターが無効です。
+        '404':
+          description: 指定されたステーションが見つかりません。
+  /teams:
+    get:
+      operationId: getTeamsInfo
+      summary: 利用可能なチームの情報を取得
+      description: RedチームとGreenチームのemojiとお題、そして全体のお知らせを取得します。
+      responses:
+        '200':
+          description: チームの情報のリスト。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsResponse'
+        '500':
+          description: サーバー内部エラー。

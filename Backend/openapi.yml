@@ -8,10 +8,15 @@ info:
     email: support@sp2407.com
 
 servers:
-  - url: http://localhost:8080/api
+  - url: http://localhost/api/v0
     description: ローカル開発サーバー
   - url: https://api.sp2407.com
     description: 本番サーバー
+tags:
+  - name: default
+    description: default
+  - name: admin
+    description: don't touch
 
 components:
   schemas:
@@ -65,27 +70,25 @@ components:
             Green:
               type: integer
               description: Greenチームの総投票数。
+    TeamProperties:
+      type: object
+      properties:
+        emoji:
+          type: string
+          description: チームのemoji。
+        theme:
+          type: string
+          description: チームのお題。
     TeamsResponse:
       type: object
       properties:
+        teamSelectionMessage:
+          type: string
+          description: チームを選ぶ際に表示される全体へのメッセージ。
         Red:
-          type: object
-          properties:
-            emoji:
-              type: string
-              description: Redチームのemoji。
-            theme:
-              type: string
-              description: Redチームのお題。
+          $ref: '#/components/schemas/TeamProperties'
         Green:
-          type: object
-          properties:
-            emoji:
-              type: string
-              description: Greenチームのemoji。
-            theme:
-              type: string
-              description: Greenチームのお題。
+          $ref: '#/components/schemas/TeamProperties'
     PhotoUploadResponse:
       type: object
       properties:
@@ -142,8 +145,6 @@ paths:
                 $ref: '#/components/schemas/NearbyStationsResponse'
         '400':
           description: リクエストパラメーターが無効です。
-        '500':
-          description: サーバー内部エラー。
 
   /stations/{stationId}/vote:
     post:
@@ -180,23 +181,6 @@ paths:
           description: リクエストパラメーターが無効です。
         '404':
           description: 指定されたステーションが見つかりません。
-        '500':
-          description: サーバー内部エラー。
-
-  /teams:
-    get:
-      operationId: getTeamsInfo
-      summary: 利用可能なチームの情報を取得
-      description: RedチームとGreenチームのemojiとお題を取得します。
-      responses:
-        '200':
-          description: チームの情報のリスト。
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TeamsResponse'
-        '500':
-          description: サーバー内部エラー。
 
   /stations/{stationId}/photo:
     post:
@@ -233,8 +217,6 @@ paths:
           description: リクエストパラメーターが無効です。
         '404':
           description: 指定されたステーションが見つかりません。
-        '500':
-          description: サーバー内部エラー。
 
   /stations/{stationId}/photosURL:
     get:
@@ -260,5 +242,31 @@ paths:
           description: リクエストパラメーターが無効です。
         '404':
           description: 指定されたステーションが見つかりません。
+
+  /teams:
+    get:
+      operationId: getTeamsInfo
+      summary: 利用可能なチームの情報を取得
+      description: RedチームとGreenチームのemojiとお題、そして全体のお知らせを取得します。
+      responses:
+        '200':
+          description: チームの情報のリスト。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsResponse'
+        '500':
+          description: サーバー内部エラー。
+
+  /database/reset:
+    get:
+      tags:
+        - admin
+      operationId: resetDatabase
+      summary: データベースのリセット
+      description: 開発環境でデータベースをリセットします。すべてのデータが削除されます。
+      responses:
+        '200':
+          description: データベースが正常にリセットされました。
         '500':
           description: サーバー内部エラー。
