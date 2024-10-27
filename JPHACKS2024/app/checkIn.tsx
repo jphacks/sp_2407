@@ -84,9 +84,6 @@ const App = () => {
         <Text style={[styles.description, { fontSize: 22 }]}>
           {nearestStation.stationName}にチェックインしたぜ！
         </Text>
-        <Text style={[styles.description, { fontSize: 15 }]}>
-          写真を撮って追加ポイントをもらおう！
-        </Text>
         <Text style={styles.description}>
           現在Redチームポイントは{currentStation?.totalVotes?.Red ?? nearestStation.totalVotes.Red}
         </Text>
@@ -105,7 +102,11 @@ const App = () => {
           onPress={() => router.push("/cameraPage")}
         >
           <Text style={{ fontSize: 20 }}>写真を撮影する</Text>
+
         </TouchableOpacity>
+        <Text style={[styles.description, { fontSize: 15 }]}>
+          写真を撮って追加ポイントをもらおう！
+        </Text>
       </View>
     </View>
   );
