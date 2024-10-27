@@ -76,12 +76,7 @@ def get_teams_info():  # noqa: E501
                          team_selection_message="夏ならどっちだ？")
 
 
-<<<<<<< HEAD
 def post_station_photo(station_id, photo = None):  # noqa: E501
-=======
-def post_station_photo(station_id, photo=None):  # noqa: E501
-  
->>>>>>> 832c52c74f97fc7e9378df3e64eb3071d7ccad89
     """ステーションの写真をアップロード
 
     指定されたステーションに対して写真をアップロードします。 # noqa: E501
