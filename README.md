@@ -1,5 +1,5 @@
 # 飛び出せ！我々の家
-[![IMAGE ALT TEXT HERE](![simulator_screenshot_0e13bd10-1bcb-47cd-bd05-8d162ca31dff_720](https://github.com/user-attachments/assets/742904ff-19f2-4a7c-bb64-63a8724cdcf2)
+[![IMAGE ALT TEXT HERE](![simulator_screenshot_0e13bd10-1bcb-47cd-bd05-8d162ca31dff_720](path/to/スクリーンショット_2024-10-27_145220-removebg-preview.png
 )
 
 ## 製品概要
