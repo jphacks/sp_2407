@@ -70,7 +70,7 @@ const App = () => {
   );
 
   const renderItem = ({ item }: { item: { id: string; uri: string } }) => (
-    <View style={[styles.imageContainer, { marginRight: 31}]}>
+    <View style={styles.imageContainer}>
       <Image source={{ uri: item.uri }} style={[styles.image, { width: imageSize, height: imageSize }]} />
     </View>
   );
@@ -84,7 +84,9 @@ const App = () => {
         <Text style={[styles.description, { fontSize: 22 }]}>
           {nearestStation.stationName}にチェックインしたぜ！
         </Text>
-
+        <Text style={[styles.description, { fontSize: 15 }]}>
+          写真を撮って追加ポイントをもらおう！
+        </Text>
         <Text style={styles.description}>
           現在Redチームポイントは{currentStation?.totalVotes?.Red ?? nearestStation.totalVotes.Red}
         </Text>
@@ -96,11 +98,7 @@ const App = () => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           numColumns={3}
-          contentContainerStyle={{
-            alignItems: 'flex-start', // 왼쪽으로 정렬
-            minWidth: screenWidth,
-          }}
-          style={{ maxHeight: screenWidth }} // 스크롤 가능하도록 제한된 높이 설정
+          contentContainerStyle={[{ minWidth: screenWidth, maxHeight: screenWidth }]}
         />
         <TouchableOpacity
           style={[styles.button, { backgroundColor: '#ddddff', marginTop: 20 }]}
@@ -108,9 +106,6 @@ const App = () => {
         >
           <Text style={{ fontSize: 20 }}>写真を撮影する</Text>
         </TouchableOpacity>
-        <Text style={[styles.description, { fontSize: 15 }]}>
-          写真を撮って追加ポイントをもらおう！
-        </Text>
       </View>
     </View>
   );
