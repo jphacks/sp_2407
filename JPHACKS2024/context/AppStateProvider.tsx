@@ -15,6 +15,7 @@ export type AppStateType = {
   teamRedEmoji: string;
   teamGreenDetail: string;
   teamGreenEmoji: string;
+  nearestStation: any;
 };
 
 // 初期状態の定義
@@ -27,6 +28,7 @@ const initialState: AppStateType = {
   teamRedDetail: '',
   teamGreenDetail: '',
   teamGreenEmoji: '',
+  nearestStation: null,
 };
 
 // リデューサーの定義
@@ -48,6 +50,8 @@ const reducer = (state = initialState, action: any): AppStateType => {
         return { ...state, teamGreenDetail: action.payload };
     case 'SET_TEAM_GREEN_EMOJI':
         return { ...state, teamGreenEmoji: action.payload };
+    case 'SET_NEAREST_STATION':
+          return { ...state, nearestStation: action.payload };
     default:
       return state;
   }

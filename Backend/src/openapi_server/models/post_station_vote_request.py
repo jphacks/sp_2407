@@ -12,21 +12,26 @@ class PostStationVoteRequest(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, team=None):  # noqa: E501
+    def __init__(self, team=None, points=None):  # noqa: E501
         """PostStationVoteRequest - a model defined in OpenAPI
 
         :param team: The team of this PostStationVoteRequest.  # noqa: E501
         :type team: str
+        :param points: The points of this PostStationVoteRequest.  # noqa: E501
+        :type points: int
         """
         self.openapi_types = {
-            'team': str
+            'team': str,
+            'points': int
         }
 
         self.attribute_map = {
-            'team': 'team'
+            'team': 'team',
+            'points': 'points'
         }
 
         self._team = team
+        self._points = points
 
     @classmethod
     def from_dict(cls, dikt) -> 'PostStationVoteRequest':
@@ -67,3 +72,28 @@ class PostStationVoteRequest(Model):
             )
 
         self._team = team
+
+    @property
+    def points(self) -> int:
+        """Gets the points of this PostStationVoteRequest.
+
+        投票する点数。  # noqa: E501
+
+        :return: The points of this PostStationVoteRequest.
+        :rtype: int
+        """
+        return self._points
+
+    @points.setter
+    def points(self, points: int):
+        """Sets the points of this PostStationVoteRequest.
+
+        投票する点数。  # noqa: E501
+
+        :param points: The points of this PostStationVoteRequest.
+        :type points: int
+        """
+        if points is not None and points < 1:  # noqa: E501
+            raise ValueError("Invalid value for `points`, must be a value greater than or equal to `1`")  # noqa: E501
+
+        self._points = points

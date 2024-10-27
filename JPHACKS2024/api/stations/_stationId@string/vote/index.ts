@@ -12,6 +12,8 @@ export type Methods = DefineMethods<{
     reqBody: {
       /** 投票するチームの名前。 */
       team?: 'Red' | 'Green' | undefined;
+      /** 投票する点数。 */
+      points?: number | undefined;
     };
   };
 }>;

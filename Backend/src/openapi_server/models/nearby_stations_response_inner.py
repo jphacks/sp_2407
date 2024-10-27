@@ -16,35 +16,40 @@ class NearbyStationsResponseInner(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, station_id=None, station_name=None, coordinates=None, total_votes=None):  # noqa: E501
+    def __init__(self, id=None, station_name=None, coordinates=None, photo_urls=None, total_votes=None):  # noqa: E501
         """NearbyStationsResponseInner - a model defined in OpenAPI
 
-        :param station_id: The station_id of this NearbyStationsResponseInner.  # noqa: E501
-        :type station_id: str
+        :param id: The id of this NearbyStationsResponseInner.  # noqa: E501
+        :type id: str
         :param station_name: The station_name of this NearbyStationsResponseInner.  # noqa: E501
         :type station_name: str
         :param coordinates: The coordinates of this NearbyStationsResponseInner.  # noqa: E501
         :type coordinates: NearbyStationsResponseInnerCoordinates
+        :param photo_urls: The photo_urls of this NearbyStationsResponseInner.  # noqa: E501
+        :type photo_urls: List[str]
         :param total_votes: The total_votes of this NearbyStationsResponseInner.  # noqa: E501
         :type total_votes: NearbyStationsResponseInnerTotalVotes
         """
         self.openapi_types = {
-            'station_id': str,
+            'id': str,
             'station_name': str,
             'coordinates': NearbyStationsResponseInnerCoordinates,
+            'photo_urls': List[str],
             'total_votes': NearbyStationsResponseInnerTotalVotes
         }
 
         self.attribute_map = {
-            'station_id': 'stationId',
+            'id': '_id',
             'station_name': 'stationName',
             'coordinates': 'coordinates',
+            'photo_urls': 'photoUrls',
             'total_votes': 'totalVotes'
         }
 
-        self._station_id = station_id
+        self._id = id
         self._station_name = station_name
         self._coordinates = coordinates
+        self._photo_urls = photo_urls
         self._total_votes = total_votes
 
     @classmethod
@@ -59,27 +64,27 @@ class NearbyStationsResponseInner(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def station_id(self) -> str:
-        """Gets the station_id of this NearbyStationsResponseInner.
+    def id(self) -> str:
+        """Gets the id of this NearbyStationsResponseInner.
 
         ステーションのID。  # noqa: E501
 
-        :return: The station_id of this NearbyStationsResponseInner.
+        :return: The id of this NearbyStationsResponseInner.
         :rtype: str
         """
-        return self._station_id
+        return self._id
 
-    @station_id.setter
-    def station_id(self, station_id: str):
-        """Sets the station_id of this NearbyStationsResponseInner.
+    @id.setter
+    def id(self, id: str):
+        """Sets the id of this NearbyStationsResponseInner.
 
         ステーションのID。  # noqa: E501
 
-        :param station_id: The station_id of this NearbyStationsResponseInner.
-        :type station_id: str
+        :param id: The id of this NearbyStationsResponseInner.
+        :type id: str
         """
 
-        self._station_id = station_id
+        self._id = id
 
     @property
     def station_name(self) -> str:
@@ -124,6 +129,29 @@ class NearbyStationsResponseInner(Model):
         """
 
         self._coordinates = coordinates
+
+    @property
+    def photo_urls(self) -> List[str]:
+        """Gets the photo_urls of this NearbyStationsResponseInner.
+
+        アップロードされた写真のURLリスト。  # noqa: E501
+
+        :return: The photo_urls of this NearbyStationsResponseInner.
+        :rtype: List[str]
+        """
+        return self._photo_urls
+
+    @photo_urls.setter
+    def photo_urls(self, photo_urls: List[str]):
+        """Sets the photo_urls of this NearbyStationsResponseInner.
+
+        アップロードされた写真のURLリスト。  # noqa: E501
+
+        :param photo_urls: The photo_urls of this NearbyStationsResponseInner.
+        :type photo_urls: List[str]
+        """
+
+        self._photo_urls = photo_urls
 
     @property
     def total_votes(self) -> NearbyStationsResponseInnerTotalVotes:

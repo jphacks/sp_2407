@@ -49,23 +49,26 @@ export default function ChooseTeam() {
     const fetchTeamsData = async () => {
       const data = await getTeamsInfo();
       if (data) {
-        setTeamsInfo(data);       
+        setTeamsInfo(data);    
+        console.log(data)   
       }
     };
 
     fetchTeamsData();
   }, []);
 
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={styles.title}>チームを選んでください</Text>
+      <Text style={styles.title}>まずチームを選ぼう。
+</Text>
       <Text style={styles.description}>{teamsInfo?.teamSelectionMessage}</Text>
 
       <View style={styles.row}>
       
           <EmojiButton emoji={teamsInfo?.Red?.emoji == undefined ? '' : teamsInfo?.Red?.emoji} title={teamsInfo?.Red?.theme == undefined ? '' : teamsInfo?.Red?.theme} action={() => 
             {
-                dispatch({ type: 'SET_TEAM', payload: 'RED' });
+                dispatch({ type: 'SET_TEAM', payload: 'Red' });
                 dispatch({ type: 'SET_TEAM_RED_DETAIL', payload: 
                     teamsInfo?.Red?.theme == undefined ? '' : teamsInfo?.Red?.theme });
                 dispatch({ type: 'SET_TEAM_RED_EMOJI', payload: 
@@ -79,7 +82,7 @@ export default function ChooseTeam() {
             }} />
           <EmojiButton emoji={teamsInfo?.Green?.emoji == undefined ? '' : teamsInfo?.Green?.emoji} title={teamsInfo?.Green?.theme == undefined ? '' : teamsInfo?.Green?.theme} action={() =>
             {
-                dispatch({ type: 'SET_TEAM', payload: 'GREEN' });
+                dispatch({ type: 'SET_TEAM', payload: 'Green' });
                 dispatch({ type: 'SET_TEAM_RED_DETAIL', payload: 
                     teamsInfo?.Red?.theme == undefined ? '' : teamsInfo?.Red?.theme });
                 dispatch({ type: 'SET_TEAM_RED_EMOJI', payload: 

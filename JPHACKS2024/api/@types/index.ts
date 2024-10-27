@@ -1,7 +1,9 @@
 /* eslint-disable */
-export type NearbyStationsResponse = {
+export type NearbyStationsResponse = StationInformation[]
+
+export type StationInformation = {
   /** ステーションのID。 */
-  stationId?: string | undefined;
+  _id?: string | undefined;
   /** ステーションの名前。 */
   stationName?: string | undefined;
 
@@ -10,19 +12,8 @@ export type NearbyStationsResponse = {
     longitude?: number | undefined;
   } | undefined;
 
-  totalVotes?: {
-    /** Redチームの総投票数。 */
-    Red?: number | undefined;
-    /** Greenチームの総投票数。 */
-    Green?: number | undefined;
-  } | undefined;
-}[]
-
-export type VoteResponse = {
-  /** 投票したステーションのID。 */
-  stationId?: string | undefined;
-  /** 投票されたチームの名前。 */
-  team?: 'Red' | 'Green' | undefined;
+  /** アップロードされた写真のURLリスト。 */
+  photoUrls?: string[] | undefined;
 
   totalVotes?: {
     /** Redチームの総投票数。 */
@@ -31,6 +22,8 @@ export type VoteResponse = {
     Green?: number | undefined;
   } | undefined;
 }
+
+export type VoteResponse = StationInformation
 
 export type TeamProperties = {
   /** チームのemoji。 */

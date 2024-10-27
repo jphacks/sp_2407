@@ -12,22 +12,29 @@ servers:
     description: ローカル開発サーバー
   - url: https://api.sp2407.com
     description: 本番サーバー
+tags:
+  - name: default
+    description: default
+  - name: admin
+    description: don't touch
 
 components:
   schemas:
     NearbyStationsResponse:
       type: array
       items:
-        type: object
-        properties:
-          stationId:
+        $ref: '#/components/schemas/StationInformation'
+    StationInformation:
+      type: object
+      properties:
+        _id:
             type: string
             format: uuid
             description: ステーションのID。
-          stationName:
+        stationName:
             type: string
             description: ステーションの名前。
-          coordinates:
+        coordinates:
             type: object
             properties:
               latitude:
@@ -36,7 +43,13 @@ components:
               longitude:
                 type: number
                 format: float
-          totalVotes:
+        photoUrls:
+            type: array
+            items:
+              type: string
+              format: uri
+            description: アップロードされた写真のURLリスト。
+        totalVotes:
             type: object
             properties:
               Red:
@@ -46,25 +59,7 @@ components:
                 type: integer
                 description: Greenチームの総投票数。
     VoteResponse:
-      type: object
-      properties:
-        stationId:
-          type: string
-          format: uuid
-          description: 投票したステーションのID。
-        team:
-          type: string
-          enum: [Red, Green]
-          description: 投票されたチームの名前。
-        totalVotes:
-          type: object
-          properties:
-            Red:
-              type: integer
-              description: Redチームの総投票数。
-            Green:
-              type: integer
-              description: Greenチームの総投票数。
+      $ref: '#/components/schemas/StationInformation'
     TeamProperties:
       type: object
       properties:
@@ -165,6 +160,10 @@ paths:
                   type: string
                   enum: [Red, Green]
                   description: 投票するチームの名前。
+                points:
+                  type: integer
+                  minimum: 1
+                  description: 投票する点数。
       responses:
         '200':
           description: 投票が成功しました。
@@ -237,6 +236,7 @@ paths:
           description: リクエストパラメーターが無効です。
         '404':
           description: 指定されたステーションが見つかりません。
+
   /teams:
     get:
       operationId: getTeamsInfo
@@ -249,5 +249,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TeamsResponse'
+        '500':
+          description: サーバー内部エラー。
+
+  /database/reset:
+    get:
+      tags:
+        - admin
+      operationId: resetDatabase
+      summary: データベースのリセット
+      description: 開発環境でデータベースをリセットします。すべてのデータが削除されます。
+      responses:
+        '200':
+          description: データベースが正常にリセットされました。
         '500':
           description: サーバー内部エラー。

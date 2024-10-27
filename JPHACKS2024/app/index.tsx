@@ -11,10 +11,11 @@ const useAppDispatch = () => useDispatch<AppDispatch>();
 
 
 const pages = [
-  { emoji: '😀', title: 'こんにちは！', description: 'リアル脱出ゲームへようこそ！' },
-  { emoji: '🗺️', title: '探検しましょう', description: '家を出て今すぐ探検しましょう！' },
-  { emoji: '✨', title: '集めましょう', description: '訪問した場所の名前から単語のカケラを集めることができます。\nカケラを集めてパズルを解くと、レベルが上がります。' },
-  { emoji: '🤔', title: 'まずあなたに関して\n教えてください', description: 'このアプリは位置情報に基づいています。' }
+  { emoji: '😀', title: 'こんにちは！', description: 'リアル脱出ゲーム\n「飛び出せ我々の家」へようこそ！' },
+  { emoji: '🗺️', title: '冒険者になる', description: '今すぐに家から飛び出そう' },
+  { emoji: '🏁', title: 'チームに入ろう', description: 'お題を見てチームに参加しよう' },
+  { emoji: '⚔️', title: 'チームでバトルしよう', description: '散歩してチェックインして、ポイントゲット！' },
+  { emoji: '🤔', title: 'さあ！冒険のはじまりだ！', description: 'このアプリは位置情報に基づいています' }
 ];
 
 export default function Index() {

@@ -15,6 +15,7 @@ export default function Layout() {
           <Stack.Screen name="mainScreen" options={{ title: 'メイン',  headerShown: false }} />
           <Stack.Screen name="checkIn" options={{ title: 'チェックイン',  headerShown: true }} />
           <Stack.Screen name="chooseTeam" options={{ title: 'チーム選択',  headerShown: false }} />
+          <Stack.Screen name="cameraPage" options={{ title: 'カメラ',  headerShown: false }} />
         </Stack>
       </PersistGate>
     </Provider>

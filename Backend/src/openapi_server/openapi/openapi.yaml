@@ -185,32 +185,46 @@ components:
   schemas:
     NearbyStationsResponse:
       items:
-        $ref: '#/components/schemas/NearbyStationsResponse_inner'
+        $ref: '#/components/schemas/StationInformation'
       type: array
-    VoteResponse:
+    StationInformation:
       example:
+        photoUrls:
+        - https://openapi-generator.tech
+        - https://openapi-generator.tech
         totalVotes:
           Red: 1
           Green: 5
-        team: Red
-        stationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        coordinates:
+          latitude: 0.8008282
+          longitude: 6.0274563
+        stationName: stationName
+        _id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
-        stationId:
-          description: 投票したステーションのID。
+        _id:
+          description: ステーションのID。
           format: uuid
-          title: stationId
+          title: _id
           type: string
-        team:
-          description: 投票されたチームの名前。
-          enum:
-          - Red
-          - Green
-          title: team
+        stationName:
+          description: ステーションの名前。
+          title: stationName
           type: string
+        coordinates:
+          $ref: '#/components/schemas/StationInformation_coordinates'
+        photoUrls:
+          description: アップロードされた写真のURLリスト。
+          items:
+            format: uri
+            type: string
+          title: photoUrls
+          type: array
         totalVotes:
-          $ref: '#/components/schemas/NearbyStationsResponse_inner_totalVotes'
-      title: VoteResponse
+          $ref: '#/components/schemas/StationInformation_totalVotes'
+      title: StationInformation
       type: object
+    VoteResponse:
+      $ref: '#/components/schemas/StationInformation'
     TeamProperties:
       example:
         emoji: emoji
@@ -285,6 +299,11 @@ components:
           - Green
           title: team
           type: string
+        points:
+          description: 投票する点数。
+          minimum: 1
+          title: points
+          type: integer
       title: postStationVote_request
       type: object
     postStationPhoto_request:
@@ -294,7 +313,7 @@ components:
           format: binary
           type: string
       type: object
-    NearbyStationsResponse_inner_coordinates:
+    StationInformation_coordinates:
       example:
         latitude: 0.8008282
         longitude: 6.0274563
@@ -307,9 +326,9 @@ components:
           format: float
           title: longitude
           type: number
-      title: NearbyStationsResponse_inner_coordinates
+      title: StationInformation_coordinates
       type: object
-    NearbyStationsResponse_inner_totalVotes:
+    StationInformation_totalVotes:
       example:
         Red: 1
         Green: 5
@@ -322,31 +341,5 @@ components:
           description: Greenチームの総投票数。
           title: Green
           type: integer
-      title: NearbyStationsResponse_inner_totalVotes
-      type: object
-    NearbyStationsResponse_inner:
-      example:
-        totalVotes:
-          Red: 1
-          Green: 5
-        coordinates:
-          latitude: 0.8008282
-          longitude: 6.0274563
-        stationName: stationName
-        stationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-      properties:
-        stationId:
-          description: ステーションのID。
-          format: uuid
-          title: stationId
-          type: string
-        stationName:
-          description: ステーションの名前。
-          title: stationName
-          type: string
-        coordinates:
-          $ref: '#/components/schemas/NearbyStationsResponse_inner_coordinates'
-        totalVotes:
-          $ref: '#/components/schemas/NearbyStationsResponse_inner_totalVotes'
-      title: NearbyStationsResponse_inner
+      title: StationInformation_totalVotes
       type: object

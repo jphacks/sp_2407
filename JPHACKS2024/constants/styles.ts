@@ -12,6 +12,14 @@ export const styles = StyleSheet.create({
       alignContent: 'flex-start',
       marginLeft: 0
     },
+    imageContainer: {
+      minWidth : 100,
+      flex: 1,
+      padding: 2,  // 画像同士のスペースを調整
+    },
+    image: {
+      resizeMode: 'cover', // 画像をコンテナ全体にカバー
+    },
     container: {
       flex: 1,
       justifyContent: 'center',

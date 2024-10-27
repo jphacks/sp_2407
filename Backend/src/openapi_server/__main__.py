@@ -15,7 +15,7 @@ def main():
     app.app.config["MONGO_URI"] = "mongodb://mongo:27017/JPHACKS2024"
     mongo = MongoClient(app.app.config["MONGO_URI"])
     app.app.mongo = mongo  # 앱에 mongo 속성으로 추가
-
+    app.app.config["UPLOAD_FOLDER"]  = "/static"
 
     app.add_api('openapi.yaml',
                 arguments={'title': 'SP2407 Nearby Stations API'},

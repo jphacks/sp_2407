@@ -14,29 +14,29 @@ class VoteResponse(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, station_id=None, team=None, total_votes=None):  # noqa: E501
+    def __init__(self, id=None, team=None, total_votes=None):  # noqa: E501
         """VoteResponse - a model defined in OpenAPI
 
-        :param station_id: The station_id of this VoteResponse.  # noqa: E501
-        :type station_id: str
+        :param id: The id of this VoteResponse.  # noqa: E501
+        :type id: str
         :param team: The team of this VoteResponse.  # noqa: E501
         :type team: str
         :param total_votes: The total_votes of this VoteResponse.  # noqa: E501
         :type total_votes: NearbyStationsResponseInnerTotalVotes
         """
         self.openapi_types = {
-            'station_id': str,
+            'id': str,
             'team': str,
             'total_votes': NearbyStationsResponseInnerTotalVotes
         }
 
         self.attribute_map = {
-            'station_id': 'stationId',
+            'id': '_id',
             'team': 'team',
             'total_votes': 'totalVotes'
         }
 
-        self._station_id = station_id
+        self._id = id
         self._team = team
         self._total_votes = total_votes
 
@@ -52,27 +52,27 @@ class VoteResponse(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def station_id(self) -> str:
-        """Gets the station_id of this VoteResponse.
+    def id(self) -> str:
+        """Gets the id of this VoteResponse.
 
         投票したステーションのID。  # noqa: E501
 
-        :return: The station_id of this VoteResponse.
+        :return: The id of this VoteResponse.
         :rtype: str
         """
-        return self._station_id
+        return self._id
 
-    @station_id.setter
-    def station_id(self, station_id: str):
-        """Sets the station_id of this VoteResponse.
+    @id.setter
+    def id(self, id: str):
+        """Sets the id of this VoteResponse.
 
         投票したステーションのID。  # noqa: E501
 
-        :param station_id: The station_id of this VoteResponse.
-        :type station_id: str
+        :param id: The id of this VoteResponse.
+        :type id: str
         """
 
-        self._station_id = station_id
+        self._id = id
 
     @property
     def team(self) -> str:

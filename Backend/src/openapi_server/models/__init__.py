@@ -1,11 +1,10 @@
 # flake8: noqa
 # import models into model package
-from openapi_server.models.nearby_stations_response_inner import NearbyStationsResponseInner
-from openapi_server.models.nearby_stations_response_inner_coordinates import NearbyStationsResponseInnerCoordinates
-from openapi_server.models.nearby_stations_response_inner_total_votes import NearbyStationsResponseInnerTotalVotes
 from openapi_server.models.photo_upload_response import PhotoUploadResponse
 from openapi_server.models.photos_url_response import PhotosURLResponse
 from openapi_server.models.post_station_vote_request import PostStationVoteRequest
+from openapi_server.models.station_information import StationInformation
+from openapi_server.models.station_information_coordinates import StationInformationCoordinates
+from openapi_server.models.station_information_total_votes import StationInformationTotalVotes
 from openapi_server.models.team_properties import TeamProperties
 from openapi_server.models.teams_response import TeamsResponse
-from openapi_server.models.vote_response import VoteResponse

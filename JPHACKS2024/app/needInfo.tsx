@@ -65,7 +65,8 @@ export default function needInfo() {
           longitudeDelta: 0.01,
         }}
       >
-         <Marker coordinate={{
+         <Marker 
+         coordinate={{
           latitude: homeCoordinates.coords.latitude,
           longitude: homeCoordinates.coords.longitude,
         }} title='Marker' />
